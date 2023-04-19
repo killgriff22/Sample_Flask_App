@@ -1,0 +1,43 @@
+body {
+    background-color: black;
+    color: lightgray;
+    font-size: 120%;
+    font-family:Arial, Helvetica, sans-serif
+}
+div.error {
+    color : red;
+}
+
+body {
+    text-align: center;
+}
+form {
+    display: inline-block;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+  }
+  
+  li {
+    float: right;
+  }
+  li.home {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: lightgray;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  /* Change the link color to #111 (black) on hover */
+  li a:hover {
+    background-color: #111;
+  }
