@@ -3,10 +3,12 @@
 from flask import Flask, redirect, url_for, render_template, request, make_response
 import json
 import random
+from flask_socketio import SocketIO
 # Flask constructor takes the name of
 # current module (__name__) as argument.
 app = Flask(__name__)
-
+socketio = SocketIO(app)
+socketio.init_app(app, cors_allowed_origins="*")
 # The route() function of the Flask class is a decorator,
 # which tells the application which URL should call
 # the associated function.
@@ -25,7 +27,16 @@ def hello_world():
     else:
         name=""
     return render_template('hello.html',name=name)
+@app.route("/chat",methods=['GET','POST'])
+def sessions():
+    return render_template('session.html')
+def messageReceived(methods=['GET', 'POST']):
+    print('message was received!!!')
 
+@socketio.on('my event')
+def handle_my_custom_event(json, methods=['GET', 'POST']):
+    print('received my event: ' + str(json))
+    socketio.emit('my response', json, callback=messageReceived)
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'GET':
@@ -111,4 +122,4 @@ if __name__ == '__main__':
     # run() method of Flask class runs the application
     # on the local development server.
     #
-    app.run(debug=True)
+    socketio.run(app, debug=True)
