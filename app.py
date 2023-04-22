@@ -14,8 +14,17 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return render_template('hello.html')
-
+    cookie = request.cookies.get('token')
+    with open("static/JS/Users.json", 'r') as UserDataBase:
+        database = json.load(UserDataBase)
+        tokenlst= database['tokens'].keys()
+        tokens = database['tokens']
+        UserDataBase.close()
+    if cookie in tokenlst:
+        name=tokens[cookie]
+    else:
+        name=""
+    return render_template('hello.html',name=name)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -29,6 +38,7 @@ def login():
         with open("static/JS/Users.json", 'r') as UserDataBase:
             database = json.load(UserDataBase)
             users = database['users']
+            tokenlst= database['tokens'].keys()
             tokens = database['tokens']
             UserDataBase.close()
         if user in users.keys():
@@ -46,8 +56,7 @@ def login():
                 with open("static/JS/Users.json", 'w') as UserDataBase:
                     UserDataBase.write(json.dumps(payload))
                     UserDataBase.close()
-                resp = make_response(render_template(
-                    'assigncookies.html', place="welcome.html"))
+                resp = make_response("<meta http-equiv='refresh' content='0; url=/welcome'>")
                 resp.set_cookie('token', token)
                 return resp
             else:
@@ -68,6 +77,7 @@ def signup():
         with open("static/JS/Users.json", 'r') as UserDataBase:
             database = json.load(UserDataBase)
             users = database['users']
+            tokenlst= database['tokens'].keys()
             tokens = database['tokens']
             UserDataBase.close()
         token = f"{random.randint(100000,999999)}"
@@ -77,8 +87,7 @@ def signup():
         with open("static/JS/Users.json", 'w') as UserDataBase:
             UserDataBase.write(json.dumps(payload))
             UserDataBase.close()
-        resp = make_response(render_template(
-            'assigncookies.html', place="welcome.html"))
+        resp = make_response("<meta http-equiv='refresh' content='0; url=/welcome'>")
         resp.set_cookie('token', token)
         return resp
 
@@ -88,11 +97,12 @@ def welcome():
     cookie = request.cookies.get('token')
     with open("static/JS/Users.json", 'r') as UserDataBase:
         database = json.load(UserDataBase)
+        tokenlst= database['tokens'].keys()
         tokens = database['tokens']
         UserDataBase.close()
-    if cookie in tokens:
-        return render_template('welcome.html', user=tokens[cookie])
-    return render_template('welcome.html')
+    if cookie in tokenlst:
+        return render_template('welcome.html', user=tokens[cookie],name=tokens[cookie])
+    return render_template('welcome.html', name="")
 
 
 # main driver function
