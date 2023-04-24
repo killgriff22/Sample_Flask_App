@@ -3,12 +3,12 @@
 from flask import Flask, redirect, url_for, render_template, request, make_response
 import json
 import random
-from flask_socketio import SocketIO
+import requests
 # Flask constructor takes the name of
 # current module (__name__) as argument.
 app = Flask(__name__)
-socketio = SocketIO(app)
-socketio.init_app(app, cors_allowed_origins="*")
+app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
+Webhook_Link = "https://discord.com/api/webhooks/1100045482413273108/lPY3PHleNHR4U2HLH1m8FfIAXdpe6ENAJsH7gEazvEHbwIVGSujK18B8jss_kM1iSZlN"
 # The route() function of the Flask class is a decorator,
 # which tells the application which URL should call
 # the associated function.
@@ -27,16 +27,6 @@ def hello_world():
     else:
         name=""
     return render_template('hello.html',name=name)
-@app.route("/chat",methods=['GET','POST'])
-def sessions():
-    return render_template('session.html')
-def messageReceived(methods=['GET', 'POST']):
-    print('message was received!!!')
-
-@socketio.on('my event')
-def handle_my_custom_event(json, methods=['GET', 'POST']):
-    print('received my event: ' + str(json))
-    socketio.emit('my response', json, callback=messageReceived)
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'GET':
@@ -74,8 +64,6 @@ def login():
                 return render_template('login.html', error="Incorrect Password!")
         else:
             return render_template('login.html', error="Incorrect Username!")
-
-
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'GET':
@@ -101,8 +89,6 @@ def signup():
         resp = make_response("<meta http-equiv='refresh' content='0; url=/welcome'>")
         resp.set_cookie('token', token)
         return resp
-
-
 @app.route('/welcome')
 def welcome():
     cookie = request.cookies.get('token')
@@ -114,12 +100,13 @@ def welcome():
     if cookie in tokenlst:
         return render_template('welcome.html', user=tokens[cookie],name=tokens[cookie])
     return render_template('welcome.html', name="")
-
-
+@app.route('/chat')
+def imgchat():
+    return render_template('imgchat.html')
 # main driver function
 if __name__ == '__main__':
 
     # run() method of Flask class runs the application
     # on the local development server.
     #
-    socketio.run(app, debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
