@@ -1,43 +1,90 @@
 body {
-    background-color: black;
-    color: lightgray;
-    font-size: 120%;
-    font-family:Arial, Helvetica, sans-serif
+  background-color: black;
+  color: lightgray;
+  font-size: 120%;
+  font-family: Arial, Helvetica, sans-serif
 }
+
 div.error {
-    color : red;
+  color: red;
 }
 
 body {
-    text-align: center;
+  text-align: center;
 }
+
 form {
-    display: inline-block;
+  display: inline-block;
 }
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-  }
-  
-  li {
-    float: right;
-  }
-  li.home {
-    float: left;
-  }
-  
-  li a {
-    display: block;
-    color: lightgray;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-  }
-  
-  /* Change the link color to #111 (black) on hover */
-  li a:hover {
-    background-color: #111;
-  }
+
+ul.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+ul.navbar li {
+  float: right;
+}
+
+ul.navbar li.home {
+  float: left;
+}
+
+ul.navbar li a {
+  display: block;
+  color: lightgray;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+ul.navbar li a:hover {
+  background-color: #111;
+}
+
+.msg {
+  float: left;
+  clear: both;
+}
+
+.imgmsg {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+
+img {
+  display: inline-block;
+  vertical-align: middle;
+}
+.writebar {
+  float: right;
+}
+.image {
+  fill: #333;
+}
+ul.usernavbar  {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #333;
+}
+
+ul.usernavbar li a {
+  text-align: left;
+  display: block;
+  color: lightgray;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color on hover */
+ul.usernavbar li a:hover {
+  background-color: black;
+  color: white;
+}

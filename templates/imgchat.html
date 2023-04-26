@@ -2,18 +2,33 @@
 
 <head>
    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/page.css') }}">
+   <style>
+      label {
+  background-color: darkgray;
+  color: LightGray;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+   </style>
 </head>
 
 <body>
-   <ul>
+   <ul class="navbar">
       <li class="home"><a href="/">Home</a></li>
-      <li class="home"><a>{{name}}</a></li>
-      <li><a href="login">Login</a></li>
-      <li><a href="signup">Register</a></li>
+      <div class="Login">
+      {{login|safe}}
+      </div>
       <li><a href="welcome">Welcome</a></li>
       <li><a href="chat">Chat</a></li>
-   </ul> 
-   <p>Welcome {{user}}!</p>
+   </ul>
+   <div class="outer">
+      {{total|safe}} 
+   </div>
+   <div class = "writebar"><form enctype="multipart/form-data" action="/chat" method="post"><input placeholder="message" type="file" hidden accept="image/*" name="Image" id="image"><input type="submit" value="Send"></form></div>
+   <label for="image">Choose File</label>
 </body>
 
 </html>

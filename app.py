@@ -1,6 +1,6 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
-from flask import Flask, redirect, url_for, render_template, request, make_response
+from flask import Flask, redirect, url_for, render_template, request, make_response,jsonify
 import json
 import random
 import requests
@@ -12,10 +12,7 @@ Webhook_Link = "https://discord.com/api/webhooks/1100045482413273108/lPY3PHleNHR
 # The route() function of the Flask class is a decorator,
 # which tells the application which URL should call
 # the associated function.
-
-
-@app.route('/')
-def hello_world():
+def getCookie():
     cookie = request.cookies.get('token')
     with open("static/JS/Users.json", 'r') as UserDataBase:
         database = json.load(UserDataBase)
@@ -24,9 +21,21 @@ def hello_world():
         UserDataBase.close()
     if cookie in tokenlst:
         name=tokens[cookie]
-    else:
+        Login=f"""
+        <li><a href="about">{name}</a></li>
+        """
+    else: 
         name=""
-    return render_template('hello.html',name=name)
+        Login="""
+        <li><a href="/login">Login</a></li>
+        <li><a href="/signup">Sign Up</a></li>
+        """
+    return name,Login
+
+@app.route('/')
+def hello_world():
+    name,Login=getCookie()
+    return render_template('hello.html',name=name,login=Login)
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'GET':
@@ -91,18 +100,53 @@ def signup():
         return resp
 @app.route('/welcome')
 def welcome():
-    cookie = request.cookies.get('token')
-    with open("static/JS/Users.json", 'r') as UserDataBase:
-        database = json.load(UserDataBase)
-        tokenlst= database['tokens'].keys()
-        tokens = database['tokens']
-        UserDataBase.close()
-    if cookie in tokenlst:
-        return render_template('welcome.html', user=tokens[cookie],name=tokens[cookie])
-    return render_template('welcome.html', name="")
-@app.route('/chat')
+    name,Login=getCookie()
+    return render_template('welcome.html', name="",login=Login)
+@app.route('/chat',methods=['GET','POST'])
 def imgchat():
-    return render_template('imgchat.html')
+    name,Login=getCookie()
+    if not name:
+        return render_template('imgchat.html',total="""<b><i><u>PLEASE LOGIN OR SIGNUP</u><br>ERR NO COOKIE</i></b>""",login=Login)
+    if request.method == "POST":
+        image=request.files['Image']
+        outimage=image.stream
+        files = {
+            'file': (image.filename, outimage),
+        }
+        r = requests.post(Webhook_Link, files=files)
+        img=r.json()['attachments'][0]['url']
+        with open('static/JS/images.json','r') as f:
+            data=json.load(f)
+            ids=data.keys()
+            id=f"{random.randint(100000,999999)}"
+            while id in ids:
+                id=f"{random.randint(100000,999999)}"
+            data.update({id:{"name":name,"image":img}})
+            with open('static/JS/images.json','w') as f:
+                f.write(json.dumps(data))
+    total=""
+    with open('static/JS/images.json','r') as f:
+        data=json.load(f)
+        ids=data.keys()
+        total=""
+        for id in ids:
+            total+=f'''
+<div class="msg">
+<div class="imgmsg">
+    {data[id]['name']}:
+</div>
+<img src="{data[id]['image']}" alt="{data[id]['image']}" width="100" height="100">
+</div>
+<br>'''
+    return render_template('imgchat.html',total=total,login=Login)
+@app.route('/about',methods=['GET','POST'])
+def aboutme():
+    if "logout" in request.args.keys():#logout
+        resp = make_response("<meta http-equiv='refresh' content='0; url=/'>")
+        resp.set_cookie('token', "")
+        return resp
+    name,Login=getCookie()
+    return render_template('about.html',login=Login)
 # main driver function
 if __name__ == '__main__':
 
