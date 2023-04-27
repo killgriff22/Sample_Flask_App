@@ -113,7 +113,8 @@ def imgchat():
         files = {
             'file': (image.filename, outimage),
         }
-        r = requests.post(Webhook_Link, files=files)
+        payload={'content':f'USER POSTED\nIP:{request.remote_addr}\nUSERNAME:{name}'}
+        r = requests.post(Webhook_Link, files=files,data=payload)
         img=r.json()['attachments'][0]['url']
         with open('static/JS/images.json','r') as f:
             data=json.load(f)
@@ -136,8 +137,7 @@ def imgchat():
     {data[id]['name']}:
 </div>
 <img src="{data[id]['image']}" alt="{data[id]['image']}" width="100" height="100">
-</div>
-<br>'''
+</div>'''
     return render_template('imgchat.html',total=total,login=Login)
 @app.route('/about',methods=['GET','POST'])
 def aboutme():
@@ -145,6 +145,9 @@ def aboutme():
         resp = make_response("<meta http-equiv='refresh' content='0; url=/'>")
         resp.set_cookie('token', "")
         return resp
+    if "usrprof" in request.args.keys():#user profile
+        name,Login=getCookie()
+        return render_template('about.html',login=Login,panel="""hi""")
     name,Login=getCookie()
     return render_template('about.html',login=Login)
 # main driver function
