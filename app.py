@@ -4,10 +4,24 @@ from flask import Flask, redirect, url_for, render_template, request, make_respo
 import json
 import random
 import requests
+import cybrsec
+import os
+from flask_bootstrap import Bootstrap
 # Flask constructor takes the name of
 # current module (__name__) as argument.
 app = Flask(__name__)
+Bootstrap(app)
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
+KEY=None
+if not os.path.isfile("/static/KEY"):
+    KEY = cybrsec.x4x5.generatekey()
+    with open("static/KEY", 'w') as f:
+        f.write(KEY)
+        f.close()
+else:
+    with open("static/KEY", 'r') as f:
+        KEY = f.read()
+        f.close()
 Webhook_Link = "https://discord.com/api/webhooks/1100045482413273108/lPY3PHleNHR4U2HLH1m8FfIAXdpe6ENAJsH7gEazvEHbwIVGSujK18B8jss_kM1iSZlN"
 # The route() function of the Flask class is a decorator,
 # which tells the application which URL should call
@@ -21,9 +35,7 @@ def getCookie():
         UserDataBase.close()
     if cookie in tokenlst:
         name=tokens[cookie]
-        Login=f"""
-        <li><a href="about">{name}</a></li>
-        """
+        Login=""
     else: 
         name=""
         Login="""
@@ -31,7 +43,10 @@ def getCookie():
         <li><a href="/signup">Sign Up</a></li>
         """
     return name,Login
-
+@app.route('/ex')
+def ex():
+    name,login=getCookie()
+    return render_template('example.html',login=login,name=name)
 @app.route('/')
 def hello_world():
     name,Login=getCookie()
@@ -53,7 +68,7 @@ def login():
             UserDataBase.close()
         if user in users.keys():
             _=0
-            if users[user] == password:
+            if cybrsec.x4x5.decrypt(KEY,users[user]) == password:
                 for usr in tokens.keys():
                     if tokens[usr] == user:
                         token = usr
@@ -79,7 +94,7 @@ def signup():
         return render_template('signup.html', error="")
     if request.method == 'POST':
         user = request.form['nm']
-        password = request.form['pwd']
+        password = cybrsec.x4x5.encrypt(KEY,request.form['pwd'])
         if (user == "") or (password == ""):
             return render_template('signup.html', error="Please enter your username and password!")
         with open("static/JS/Users.json", 'r') as UserDataBase:
@@ -90,7 +105,7 @@ def signup():
             UserDataBase.close()
         token = f"{random.randint(100000,999999)}"
         tokens.update({token: user})
-        users.update({user: password})
+        users.update({user: {"password":password,"profimg":f"{defualtimg}"}})
         payload = {'users': users, 'tokens': tokens}
         with open("static/JS/Users.json", 'w') as UserDataBase:
             UserDataBase.write(json.dumps(payload))
@@ -146,14 +161,17 @@ def aboutme():
         resp.set_cookie('token', "")
         return resp
     if "usrprof" in request.args.keys():#user profile
-        name,Login=getCookie()
-        return render_template('about.html',login=Login,panel="""hi""")
+        if request.method == "GET":
+            name,Login=getCookie()
+            return render_template('about.html',login=Login,panel=f"""
+            <button onclick="updateProfile()">Update Profile</button>
+""")
     name,Login=getCookie()
-    return render_template('about.html',login=Login)
+    return render_template('about.html',login=Login,name=name)
 # main driver function
 if __name__ == '__main__':
 
     # run() method of Flask class runs the application
     # on the local development server.
     #
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=80)

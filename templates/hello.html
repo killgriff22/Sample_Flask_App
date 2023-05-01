@@ -1,18 +1,33 @@
 <html>
 
-   <head>
-      <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/page.css') }}">
-   </head>
+<head>
+   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/page.css') }}">
+   <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 
    <body>   
         
-      <ul class="navbar">
-         <li class="home"><a href="/">Home</a></li>
-         <div class="Login">
-         {{login|safe}}
+      <nav class="navbar navbar-inverse">
+         <div class="container-fluid">
+           <div class="navbar-header">
+             <a class="navbar-brand" href="about">{{name}}</a>
+           </div>
+           <ul class="nav navbar-nav">
+             <li><a href="ex">Example</a></li>
+             <li><a href="chat">Chat</a></li>
+             <li><a href="welcome">Welcome</a></li>
+             <li class="active"><a href="/">Home</a></li>
+             {{ login|safe }}
+           </ul>
          </div>
-         <li><a href="welcome">Welcome</a></li>
-         <li><a href="chat">Chat</a></li>
-      </ul>  
+       </nav> 
    </body>
 </html>
