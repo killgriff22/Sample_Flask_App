@@ -13,14 +13,20 @@
    </head>
 
    <body>  
-      <ul class="navbar">
-         <li class="home"><a href="/">Home</a></li>
-         <div class="Login">
-         {{login|safe}}
+      <nav class="navbar navbar-inverse">
+         <div class="container-fluid">
+           <div class="navbar-header ">
+             <a class="navbar-brand" href="about">{{name}}</a>
+           </div>
+           <ul class="nav navbar-nav">
+             <li><a href="ex">Example</a></li>
+             <li><a href="chat">Chat</a></li>
+             <li><a href="welcome">Welcome</a></li>
+             <li><a href="/">Home</a></li>
+             {{ login|safe }}
+           </ul>
          </div>
-         <li><a href="welcome">Welcome</a></li>
-         <li><a href="chat">Chat</a></li>
-      </ul>
+       </nav>
       <form action = "/login" method = "post" class = "loginform">
           <div class = "error">{{error}}</div>
  

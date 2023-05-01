@@ -105,7 +105,7 @@ def signup():
             UserDataBase.close()
         token = f"{random.randint(100000,999999)}"
         tokens.update({token: user})
-        users.update({user: {"password":password,"profimg":f"{defualtimg}"}})
+        users.update({user: {"password":password,"profimg":"https://cdn.discordapp.com/attachments/1100045482413273108/1100045482413273108/unknown.png"}})
         payload = {'users': users, 'tokens': tokens}
         with open("static/JS/Users.json", 'w') as UserDataBase:
             UserDataBase.write(json.dumps(payload))

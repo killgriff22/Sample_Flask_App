@@ -1,6 +1,4 @@
-body {
-  background-color: black;
-  color: lightgray;
-  font-size: 120%;
-  font-family: Arial, Helvetica, sans-serif
+.navbar{
+    margin-bottom: 0px;
+    border-radius: 0;
 }
