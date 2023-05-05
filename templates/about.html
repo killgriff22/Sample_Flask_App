@@ -1,59 +1,67 @@
 <html>
-
 <head>
-   <link rel="stylesheet" href="{{url_for('static',filename='styles/page.css')}}" <!-- Latest compiled and minified CSS
-      -->
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-   <!-- jQuery library -->
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-
-   <!-- Latest compiled JavaScript -->
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/page.css') }}">
+   <!-- Latest compiled and minified CSS -->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 
-<body class="bg-dark">
-   <nav class="navbar navbar-inverse" style="margin-bottom: 0; border-radius: 0;">
+<body>
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-         <div class="navbar-header ">
-            <a class="navbar-brand" href="about">{{name}}</a>
+         <a class="navbar-brand" href="about">{{name if name else ""}}</a>
+         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+               <li class="nav-item">
+                  <a class="nav-link" href="/">Home</a>
+               </li>
+               <li class="nav-item"><a class="nav-link" href="ex">Example</a></li>
+               <li class="nav-item">
+                  <a class="nav-link" href="chat">Chat</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link" href="welcome">Welcome</a>
+               </li>
+               {{login|safe}}
+            </ul>
          </div>
-         <ul class="nav navbar-nav">
-            <li><a href="ex">Example</a></li>
-            <li><a href="chat">Chat</a></li>
-            <li><a href="welcome">Welcome</a></li>
-            <li><a href="/">Home</a></li>
-            {{ login|safe }}
-         </ul>
       </div>
    </nav>
-   <div class="container" style="float:left;width:fit-content;padding:0;">
-      <nav class="navbar navbar-inverse" style="border-radius: 0;">
 
-         <!-- Links -->
-         <ul class="nav flex-column">
-            <li class="nav-item">
-               <a class="nav-link" href="?usrprof">User Profile</a>
-            </li>
-            <li class="nav-item">
-               <a class="nav-link" href="?usrpref">User Prefrences</a>
-            </li>
-            <li class="nav-item">
-               <a class="nav-link" href="?sitepref">Site Prefrences</a>
-            </li>
-         </ul>
+   <div class="container-fluid">
+      <div class="row">
+         <div class="col-1" style="padding: 0;margin:0;">
+            <nav class="navbar navbar-dark bg-dark flex-column" style="padding:0;float:left;">
+               <ul class="navbar-nav">
+                  <li class="nav-item">
+                     <a class="nav-link" href="?usrprof">User Profile</a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="?usrpref">User Preferences</a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="?usrset">Site Preferences</a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="?logout">Logout</a>
+                  </li>
+               </ul>
+            </nav>
+         </div>
+         <div class="col-9 bg-dark text-white-50">
+            {{panel|safe}}
+         </div>
+      </div>
+   </div>
 
-      </nav>
-   </div>
-   <div class="container" style="float:left;width:fit-content;padding:0;">
-      <nav class="narbar-inverse navbar-fixed-bottom">
-         <ul class="nav flex-column">
-            <li class="nav-item fixed-bottom">
-               <a class="nav-link" href="?logout">Logout</a>
-            </li>
-         </ul>
-      </nav>
-   </div>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
 </body>
-
 </html>
