@@ -7,13 +7,14 @@ import requests
 import cybrsec
 import os
 from flask_bootstrap import Bootstrap
+import flask
 # Flask constructor takes the name of
 # current module (__name__) as argument.
 app = Flask(__name__)
 Bootstrap(app)
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
 KEY = None
-if not os.path.isfile("/static/KEY"):
+if not os.path.isfile("static/KEY"):
     KEY = cybrsec.x4x5.generatekey()
     with open("static/KEY", 'w') as f:
         f.write(KEY)
@@ -300,7 +301,9 @@ def aboutme():
     name, Login = getCookie()
     return render_template('about.html', login=Login, name=name, panel=panel)
 
-
+@app.route("/favicon.ico")
+def favicon():
+    return flask.send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 # main driver function
 if __name__ == '__main__':
 
