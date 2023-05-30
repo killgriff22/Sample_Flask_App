@@ -1,5 +1,4 @@
-# Importing flask module in the project is mandatory
-# An object of Flask class is our WSGI application.
+# The majority of the boilerplate is from a W3S tutorial i think
 from flask import Flask, redirect, url_for, render_template, request, make_response, jsonify
 import json
 import random
@@ -8,8 +7,6 @@ import cybrsec
 import os
 from flask_bootstrap import Bootstrap
 import flask
-# Flask constructor takes the name of
-# current module (__name__) as argument.
 app = Flask(__name__)
 Bootstrap(app)
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
@@ -78,7 +75,8 @@ def getpref():  # get the user preferences like theme, font, and font size
         UserprefDataBase.close()
     return userpref if userpref else None
 
-
+#the example page is almost always ripped from the internet
+#in this case a bootstrpa tutorial i found
 @app.route('/ex')
 def ex():
     name, login = getCookie()
@@ -304,10 +302,7 @@ def aboutme():
 @app.route("/favicon.ico")
 def favicon():
     return flask.send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
-# main driver function
+# Yeah just the last of the boilerplate,
+# i'm suprised at ahow much i actually wrote
 if __name__ == '__main__':
-
-    # run() method of Flask class runs the application
-    # on the local development server.
-    #
     app.run(debug=True, host='0.0.0.0', port=80)

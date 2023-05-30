@@ -1,4 +1,5 @@
 defualtexpect="1234567890ZXCVBNM<>?ASDFGHJKL:QWERTYUIOP}[|~!@#$%^&*()_+zxcvbnm,./asdfghjkl;qwertyuiop[]"
+#very proud of this very shitty encryption method i wrote like a year ago
 class x4x5:
     def generatekey(expect=defualtexpect):
         import random
