@@ -78,15 +78,15 @@ def getpref():  # get the user preferences like theme, font, and font size
 #the example page is almost always ripped from the internet
 #in this case a bootstrpa tutorial i found
 @app.route('/ex')
-def ex():
+def ex():#example page
     name, login = getCookie()
     return render_template('example.html', login=login, name=name)
 @app.route('/')
-def hello_world():
+def hello_world():#home page
     name, Login = getCookie()
     return render_template('hello.html', name=name, login=Login)
 @app.route('/login', methods=['POST', 'GET'])
-def login():
+def login():#login page
     if request.method == 'GET':
         return render_template('login.html', error="")
     if request.method == 'POST':
@@ -102,7 +102,7 @@ def login():
             UserDataBase.close()
         if user in users.keys():
             _ = 0
-            if cybrsec.x4x5.decrypt(KEY, users[user]) == password:
+            if cybrsec.x4x5.decrypt(KEY, users[user]['password']) == password:
                 for usr in tokens.keys():
                     if tokens[usr] == user:
                         token = usr
@@ -124,7 +124,7 @@ def login():
         else:
             return render_template('login.html', error="Incorrect Username!")
 @app.route('/signup', methods=['GET', 'POST'])
-def signup():
+def signup():#Signup page
     if request.method == 'GET':
         return render_template('signup.html', error="")
     if request.method == 'POST':
@@ -151,11 +151,11 @@ def signup():
         resp.set_cookie('token', token)
         return resp
 @app.route('/welcome')
-def welcome():
+def welcome():#place where you get sent after getting a token
     name, Login = getCookie()
     return render_template('welcome.html', name=name, login=Login)
 @app.route('/chat', methods=['GET', 'POST'])
-def imgchat():
+def imgchat():#the image chat
     name, Login = getCookie()
     if not name:
         return render_template('imgchat.html', total="""<b><i><u>PLEASE LOGIN OR SIGNUP</u><br>ERR NO COOKIE</i></b>""", login=Login)
@@ -191,9 +191,9 @@ def imgchat():
 </div>
 <img src="{data[id]['image']}" alt="{data[id]['image']}" width="100" height="100">
 </div>'''
-    return render_template('imgchat.html', total=total, login=Login)
+    return render_template('imgchat.html', total=total, login=Login, name=name)
 @app.route('/about', methods=['GET', 'POST'])
-def aboutme():
+def aboutme():#preference panels
     panel = ""
     if "logout" in request.args.keys():  # logout
         resp = make_response("<meta http-equiv='refresh' content='0; url=/'>")
@@ -300,7 +300,7 @@ def aboutme():
     return render_template('about.html', login=Login, name=name, panel=panel)
 
 @app.route("/favicon.ico")
-def favicon():
+def favicon():#cool lil icon
     return flask.send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 # Yeah just the last of the boilerplate,
 # i'm suprised at ahow much i actually wrote
